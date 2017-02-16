@@ -1,0 +1,72 @@
+﻿@model WebApplication2.ViewModel.CustomerViewModel
+    @using WebApplication2.Models;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>EnterCustome</title>
+</head>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<body>
+    <div> 
+        
+        <form id="frm1">
+            <i>Customer Name:-</i> @Html.TextBoxFor(m => m.customer.CustomerName)<br />
+            @Html.ValidationMessageFor(x => x.customer.CustomerName)<br />
+            <i>Customer Code:-</i> @Html.TextBoxFor(m => m.customer.CustomerCode)<br />
+            @Html.ValidationMessageFor(x => x.customer.CustomerCode)<br />
+           </form>
+            <input id="Btn" type="button" value="Add customer" onclick="SendData()" />
+        
+            <br />
+        <div id="status"></div>
+        
+         <table id="tbl">
+             <tr>
+                 <td>Customer Code</td>
+                 <td>Customer Name</td>
+             </tr>
+         </table>  
+        <script language="javascript">
+            $("#status").text("loading");
+           
+            $.get("getCustomers", null, BindData);
+            function BindData(customers)
+            {
+                var tbl = $("#tbl");//ref of the table obj
+                //forloop
+                for (var j = 0; j < customers.length; j++)
+                {
+                    var newRow = "<tr>" +
+                        "<td>" + customers[j].CustomerCode + "</td>" +
+                         "<td>" + customers[j].CustomerName + "</td>" +
+                        "</tr>";
+                    tbl.append(newRow);
+                }
+                $("#status").text("");
+            }
+            function SendData()
+            {
+                //post to call mvc controller
+                //referene from form data which is frm1,serialize the data
+                
+                $("#status").text("Adding Data Please wait....");
+                var frm = $("#frm1").serialize();
+                $.post("Submit", frm, BindData);
+                //set the cus code n cus name n clear the data
+             
+                $("#customer_CustomerName").val("");
+                $("#customer_CustomerCode").val("");
+            }
+
+            </script>
+        </div>
+</body>
+</html>
