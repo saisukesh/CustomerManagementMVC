@@ -1,0 +1,8 @@
+﻿@model WebApplication2.ViewModel.CustomerViewModel
+@using WebApplication2.Models;
+
+
+@{ 
+    WebGrid obj = new WebGrid(Model.customers);
+}
+@obj.GetHtml();
